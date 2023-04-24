@@ -1,0 +1,16 @@
+schema-version: v1
+kind: plugin
+metadata:
+  name: gha-super-linter
+  display-name: gha-super-linter
+  description: Plugin to add a super-linter GitHub actions workflow
+  version: 0.0.1
+  picture: plugin.png
+spec:
+  type: app
+  about: docs/about.md
+  implementation: docs/implementation.md
+  release-notes: docs/release-notes-0.0.1.md
+  requirements: docs/requirements.md
+  technologies: # Ref: https://docs.stackspot.com/docs/create-stacks/yaml-files/yaml/#technologies
+    - Github Actions
