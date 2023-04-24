@@ -1,0 +1,23 @@
+schema-version: v1
+kind: plugin
+metadata:
+  name: init-repo
+  display-name: init-repo
+  description: Plugin to init repository files
+  version: 0.0.1
+  picture: plugin.png
+spec:
+  type: app
+  compatibility:
+  about: docs/about.md
+  implementation: docs/implementation.md
+  release-notes: docs/release-notes-0.0.1.md
+  requirements: docs/requirements.md
+  technologies: # Ref: https://docs.stackspot.com/docs/create-stacks/yaml-files/yaml/#technologies
+  inputs:
+  - label: Project name
+    type: text
+    name: project_name
+    default: project-name
+global-computed-inputs:
+  project_name_sanitized: "{{inputs.project_name|replace(' ', '-')|lower}}"
