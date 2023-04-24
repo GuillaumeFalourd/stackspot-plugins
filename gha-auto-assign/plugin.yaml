@@ -9,7 +9,6 @@ metadata:
 spec:
   type: app
   compatibility:
-    - python
   about: docs/about.md
   implementation: docs/implementation.md
   release-notes: docs/release-notes-0.0.1.md
