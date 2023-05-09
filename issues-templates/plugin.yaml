@@ -8,7 +8,6 @@ metadata:
   picture: plugin.png
 spec:
   type: app
-  compatibility:
   about: docs/about.md
   implementation: docs/implementation.md
   release-notes: docs/release-notes-0.0.1.md

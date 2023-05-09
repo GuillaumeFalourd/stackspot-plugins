@@ -8,12 +8,10 @@ metadata:
   picture: plugin.png
 spec:
   type: app
-  compatibility:
   about: docs/about.md
   implementation: docs/implementation.md
   release-notes: docs/release-notes-0.0.1.md
   requirements: docs/requirements.md
-  technologies: # Ref: https://docs.stackspot.com/docs/create-stacks/yaml-files/yaml/#technologies
   inputs:
   - label: Project name
     type: text
