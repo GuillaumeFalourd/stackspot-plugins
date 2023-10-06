@@ -6,6 +6,8 @@ Repository with StackSpot plugins
 
 ### Ready
 
+#### Plugin Schema V1
+
 `stk apply plugin gha-auto-assign`: Plugin to add a auto-assign GitHub actions workflow
 
 `stk apply plugin gha-gitleaks`: Plugin to add a gitleaks GitHub actions workflow
@@ -16,4 +18,8 @@ Repository with StackSpot plugins
 
 `stk apply plugin init-repo`: Plugin to init repository files
 
-`stk apply plugin issues-templates`: Plugin to add issue templates to the GitHub repository\
+`stk apply plugin issues-templates`: Plugin to add issue templates to the GitHub repository
+
+#### Plugin Schema V2
+
+`stk apply plugin gha-stk-self-hosted`: Plugin to add a StackSpot Self Hosted Runtime GitHub actions workflow
