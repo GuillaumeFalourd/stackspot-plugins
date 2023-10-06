@@ -25,9 +25,9 @@ jobs:
           ENVIRONMENT: {{ environment }}
           VERSION_TAG: {{ '${{ github.sha }}' }}
           TF_STATE_BUCKET_NAME: {{ tfstate_bucket_name }}
-          TF_STATE_REGION: {{ tfstate_region }}
+          TF_STATE_REGION: {{ aws_region }}
           IAC_BUCKET_NAME: {{ iac_bucket_name }}
-          IAC_REGION: {{ iac_region }}
+          IAC_REGION: {{ aws_region }}
           VERBOSE: true
 
   run-task:
@@ -50,7 +50,7 @@ jobs:
           AWS_ACCESS_KEY_ID: {{ '${{ secrets.AWS_ACCESS_KEY_ID }}' }}
           AWS_SECRET_ACCESS_KEY: {{ '${{ secrets.AWS_SECRET_ACCESS_KEY }}' }}
           AWS_SESSION_TOKEN: {{ '${{ secrets.AWS_SESSION_TOKEN }}' }}
-          AWS_REGION: {{ aws_resources_region }}
+          AWS_REGION: {{ aws_region }}
           RUN_TASK_ID: {{ '${{ matrix.task.runTaskId }}' }}
 
       - name: DEPLOY
@@ -64,7 +64,7 @@ jobs:
           AWS_ACCESS_KEY_ID: {{ '${{ secrets.AWS_ACCESS_KEY_ID }}' }}
           AWS_SECRET_ACCESS_KEY: {{ '${{ secrets.AWS_SECRET_ACCESS_KEY }}' }}
           AWS_SESSION_TOKEN: {{ '${{ secrets.AWS_SESSION_TOKEN }}' }}
-          AWS_REGION: {{ aws_resources_region }}
+          AWS_REGION: {{ aws_region }}
           REPOSITORY_NAME: {{ github_repository_name }}
           RUN_TASK_ID: {{ '${{ matrix.task.runTaskId }}' }}
 
@@ -79,6 +79,6 @@ jobs:
           AWS_ACCESS_KEY_ID: {{ '${{ secrets.AWS_ACCESS_KEY_ID }}' }}
           AWS_SECRET_ACCESS_KEY: {{ '${{ secrets.AWS_SECRET_ACCESS_KEY }}' }}
           AWS_SESSION_TOKEN: {{ '${{ secrets.AWS_SESSION_TOKEN }}' }}
-          AWS_REGION: {{ aws_resources_region }}  
+          AWS_REGION: {{ aws_region }}  
           REPOSITORY_NAME: {{ github_repository_name }}
           RUN_TASK_ID: {{ '${{ matrix.task.runTaskId }}' }}

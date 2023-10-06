@@ -39,26 +39,16 @@ spec:
       type: text
       required: true
       help: 'S3 bucket name where the tfstate files generated during the process will be stored'
-    - label: TFState AWS region
-      name: tfstate_region
-      type: text
-      required: true
-      help: 'AWS Region used to save the TFState (e.g: us-east-1)'
     - label: IAC Bucket Name
       name: iac_bucket_name
       type: text
       required: true
       help: 'S3 bucket name where the IaC files generated during the process will be stored'
-    - label: IAC AWS region
-      name: iac_region
+    - label: AWS region
+      name: aws_region
       type: text
       required: true
-      help: 'AWS Region used to save the IaC (e.g: us-east-1)'
-    - label: AWS resources region
-      name: aws_resources_region
-      type: text
-      required: true
-      help: 'AWS Region where the resources will be provisioned (e.g: us-east-1)'
+      help: 'AWS Region where the resources will be provisioned and stores (e.g: us-east-1)'
     - label: Github repository name
       name: github_repository_name
       type: text
