@@ -1,0 +1,84 @@
+name: Stk Self Hosted
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: {{ '${{ github.workflow }}' }}-{{ '${{ github.ref }}' }}
+  cancel-in-progress: true
+
+jobs:
+  get-tasks:
+    runs-on: {{ self_hosted_runner_name }}
+    outputs:
+      tasks: {{ '${{ steps.run.outputs.tasks }}' }}
+    steps:
+      - name: Get Tasks
+        id: run
+        uses: stack-spot/runtime-manager-action@main
+        with:
+          CLIENT_ID: {{ '${{ secrets.STK_CLIENT_ID }}' }}
+          CLIENT_KEY: {{ '${{ secrets.STK_CLIENT_KEY }}' }}
+          CLIENT_REALM: {{ '${{ secrets.STK_CLIENT_REALM }}' }}
+          WORKSPACE: {{ workspace }}
+          ENVIRONMENT: {{ environment }}
+          VERSION_TAG: {{ '${{ github.sha }}' }}
+          TF_STATE_BUCKET_NAME: {{ tfstate_bucket_name }}
+          TF_STATE_REGION: {{ tfstate_region }}
+          IAC_BUCKET_NAME: {{ iac_bucket_name }}
+          IAC_REGION: {{ iac_region }}
+          VERBOSE: true
+
+  run-task:
+    runs-on: {{ self_hosted_runner_name }}
+    needs: [get-tasks]
+    strategy:
+        matrix:
+          task: {{ '${{ fromJSON(needs.get-tasks.outputs.tasks) }}' }}
+        fail-fast: true
+        max-parallel: 1
+    steps:
+      - name: IAC
+        if: contains( matrix.task.taskType , 'IAC')
+        uses: stack-spot/runtime-iac-action@main
+        with:
+          FEATURES_LEVEL_LOG: debug
+          CLIENT_ID: {{ '${{ secrets.STK_CLIENT_ID }}' }}
+          CLIENT_KEY: {{ '${{ secrets.STK_CLIENT_KEY }}' }}
+          CLIENT_REALM: {{ '${{ secrets.STK_CLIENT_REALM }}' }}
+          AWS_ACCESS_KEY_ID: {{ '${{ secrets.AWS_ACCESS_KEY_ID }}' }}
+          AWS_SECRET_ACCESS_KEY: {{ '${{ secrets.AWS_SECRET_ACCESS_KEY }}' }}
+          AWS_SESSION_TOKEN: {{ '${{ secrets.AWS_SESSION_TOKEN }}' }}
+          AWS_REGION: {{ aws_resources_region }}
+          RUN_TASK_ID: {{ '${{ matrix.task.runTaskId }}' }}
+
+      - name: DEPLOY
+        if: contains( matrix.task.taskType , 'DEPLOY')
+        uses: stack-spot/runtime-deploy-action@main
+        with:
+          FEATURES_LEVEL_LOG: debug
+          CLIENT_ID: {{ '${{ secrets.STK_CLIENT_ID }}' }}
+          CLIENT_KEY: {{ '${{ secrets.STK_CLIENT_KEY }}' }}
+          CLIENT_REALM: {{ '${{ secrets.STK_CLIENT_REALM }}' }}
+          AWS_ACCESS_KEY_ID: {{ '${{ secrets.AWS_ACCESS_KEY_ID }}' }}
+          AWS_SECRET_ACCESS_KEY: {{ '${{ secrets.AWS_SECRET_ACCESS_KEY }}' }}
+          AWS_SESSION_TOKEN: {{ '${{ secrets.AWS_SESSION_TOKEN }}' }}
+          AWS_REGION: {{ aws_resources_region }}
+          REPOSITORY_NAME: {{ github_repository_name }}
+          RUN_TASK_ID: {{ '${{ matrix.task.runTaskId }}' }}
+
+      - name: DESTROY
+        if: contains( matrix.task.taskType , 'DESTROY')
+        uses: stack-spot/runtime-destroy-action@main
+        with:
+          FEATURES_LEVEL_LOG: debug
+          CLIENT_ID: {{ '${{ secrets.STK_CLIENT_ID }}' }}
+          CLIENT_KEY: {{ '${{ secrets.STK_CLIENT_KEY }}' }}
+          CLIENT_REALM: {{ '${{ secrets.STK_CLIENT_REALM }}' }}
+          AWS_ACCESS_KEY_ID: {{ '${{ secrets.AWS_ACCESS_KEY_ID }}' }}
+          AWS_SECRET_ACCESS_KEY: {{ '${{ secrets.AWS_SECRET_ACCESS_KEY }}' }}
+          AWS_SESSION_TOKEN: {{ '${{ secrets.AWS_SESSION_TOKEN }}' }}
+          AWS_REGION: {{ aws_resources_region }}  
+          REPOSITORY_NAME: {{ github_repository_name }}
+          RUN_TASK_ID: {{ '${{ matrix.task.runTaskId }}' }}

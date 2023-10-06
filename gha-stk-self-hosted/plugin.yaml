@@ -16,24 +16,51 @@ spec:
   requirements: docs/requirements.md
   repository: https://github.com/GuillaumeFalourd/stackspot-plugins
   technologies: # Ref: https://docs.stackspot.com/content-creator/studio/yaml-files/plugin-yaml/#technologies
-    - Api
+    - Github Actions
   inputs:
-    - label: Type name of your resource
-      name: resource
+    - label: Self Hosted Runner name
+      name: self_hosted_runner_name
       type: text
       required: true
-      default: Client
-      pattern: '([A-Z][a-z]+)+'
-      help: 'Inform your resource name (e.g.: Client)'
-    - label: Choose http method of new endpoint
-      name: method
+      default: ubuntu-latest
+      help: 'Self Hosted Runner used to execute the repository workflow on Github Actions'
+    - label: Workspace where the project will be deployed
+      name: workspace
       type: text
-      items:
-        - GET
-        - POST
-        - PUT
-        - DELETE
-        - PATCH
-      default: GET
       required: true
-      help: 'Inform the method of the endpoint (e.g.: post or delete)'
+      help: 'Inform the StackSpot Workspace name where the application has been registered'
+    - label: Environment where the project will be deployed
+      name: environment
+      type: text
+      required: true
+      help: 'Inform the StackSpot Environment name where the application will be deployed'
+    - label: TFState Bucket Name
+      name: tfstate_bucket_name
+      type: text
+      required: true
+      help: 'S3 bucket name where the tfstate files generated during the process will be stored'
+    - label: TFState AWS region
+      name: tfstate_region
+      type: text
+      required: true
+      help: 'AWS Region used to save the TFState (e.g: us-east-1)'
+    - label: IAC Bucket Name
+      name: iac_bucket_name
+      type: text
+      required: true
+      help: 'S3 bucket name where the IaC files generated during the process will be stored'
+    - label: IAC AWS region
+      name: iac_region
+      type: text
+      required: true
+      help: 'AWS Region used to save the IaC (e.g: us-east-1)'
+    - label: AWS resources region
+      name: aws_resources_region
+      type: text
+      required: true
+      help: 'AWS Region where the resources will be provisioned (e.g: us-east-1)'
+    - label: Github repository name
+      name: github_repository_name
+      type: text
+      required: true
+      help: 'Github repository name'
