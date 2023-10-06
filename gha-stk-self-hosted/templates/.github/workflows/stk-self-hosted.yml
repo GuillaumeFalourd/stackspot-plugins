@@ -65,7 +65,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: {{ '${{ secrets.AWS_SECRET_ACCESS_KEY }}' }}
           AWS_SESSION_TOKEN: {{ '${{ secrets.AWS_SESSION_TOKEN }}' }}
           AWS_REGION: {{ aws_region }}
-          REPOSITORY_NAME: {{ github_repository_name }}
+          REPOSITORY_NAME: {{ '${{ github.event.repository.name }}' }}
           RUN_TASK_ID: {{ '${{ matrix.task.runTaskId }}' }}
 
       - name: DESTROY
@@ -80,5 +80,5 @@ jobs:
           AWS_SECRET_ACCESS_KEY: {{ '${{ secrets.AWS_SECRET_ACCESS_KEY }}' }}
           AWS_SESSION_TOKEN: {{ '${{ secrets.AWS_SESSION_TOKEN }}' }}
           AWS_REGION: {{ aws_region }}  
-          REPOSITORY_NAME: {{ github_repository_name }}
+          REPOSITORY_NAME: {{ '${{ github.event.repository.name }}' }}
           RUN_TASK_ID: {{ '${{ matrix.task.runTaskId }}' }}
