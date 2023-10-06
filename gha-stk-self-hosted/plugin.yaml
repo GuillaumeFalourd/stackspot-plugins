@@ -48,6 +48,7 @@ spec:
       name: aws_region
       type: text
       required: true
+      default: us-east-1
       help: 'AWS Region where the resources will be provisioned and stores (e.g: us-east-1)'
     - label: Github repository name
       name: github_repository_name
