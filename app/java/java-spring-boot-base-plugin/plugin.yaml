@@ -20,7 +20,7 @@ spec:
   usage: docs/usage.md
   implementation: docs/implementation.md
   requirements: docs/requirements.md
-  repository: https://github.com/stack-spot/graphene-spring-boot-base-plugin.git
+  repository: https://github.com/GuillaumeFalourd/stackspot-plugins
   release-notes: docs/release-notes-0.0.1.md
   technologies: # Ref: https://docs.stackspot.com/docs/create-stacks/yaml-files/yaml/#technologies
     - Api
