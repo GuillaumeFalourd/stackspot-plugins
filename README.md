@@ -23,3 +23,7 @@ Repository with StackSpot plugins
 #### Plugin Schema V2
 
 `stk apply plugin gha-stk-self-hosted`: Plugin to add a StackSpot Self Hosted Runtime GitHub actions workflow
+
+`stk apply plugin java-spring-boot-base-plugin`: Plugin to add Java Spring Boot base implementation
+
+`stk apply plugin java-feign-plugin`: Plugin to add Java Feign implementation

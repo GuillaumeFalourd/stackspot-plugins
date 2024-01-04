@@ -1,0 +1,1 @@
+The plugin adds to the Stack the ability to provision an DynamoDB on AWS.

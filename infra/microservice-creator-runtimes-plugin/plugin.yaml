@@ -1,0 +1,124 @@
+schema-version: v2
+kind: plugin
+metadata:
+  version: 2.0.0
+  picture: plugin.png
+  name: microservice-creator-runtimes
+  display-name: Runtimes Microservice Creator
+  description: Plugin to create a microservice from an application's source code.
+spec:
+  type: infra
+  runtime:
+    environment:
+      - terraform-1-4
+      - aws-cli-2
+      - git-2
+  about: docs/about.md
+  implementation: docs/implementation.md
+  release-notes: docs/release-notes-0.0.1.md
+  requirements: docs/requirements.md
+  repository: https://github.com/GuillaumeFalourd/stackspot-plugins
+  technologies:
+    - Api
+  requires:
+    connections:
+      - type: aws-eks-conn
+        alias: eks
+  generates:
+    connections:
+      - type: aws-iam-role-conn
+        alias: aws-iam-role-conn
+        outputs:
+          - from: aws_role_arn
+            to:   arn
+          - from: aws_role_name
+            to:   name        
+  inputs:
+  - label: Microservice Name
+    type: text
+    name: microservice_name
+    required: true
+    global: true
+  - label: Image
+    type: text
+    name: image
+    required: false
+  - label: Port
+    type: text
+    name: port
+    default: "80"
+    required: true
+    help: "Inform the port of the microservice (e.g: 8080)."
+  - label: Do you want to specify Ingress for your app
+    type: bool
+    name: check_ingress
+    default: true
+    required: false
+  - label: Domain
+    type: text
+    name: domain
+    condition:
+      variable: check_ingress
+      operator: "=="
+      value: true
+    required: false
+  - label: Endpoint
+    type: text
+    name: endpoint
+    default: "/"
+    condition:
+      variable: check_ingress
+      operator: "=="
+      value: true
+    required: false
+  - label: Environment
+    type: text
+    name: environment
+    help: Choose the name of the environment.
+    default: "Production"
+    required: true
+    items:
+      - Production
+      - QA
+      - Sandbox
+  - label: Region
+    type: text
+    name: region
+    help: Choose the name of the region.
+    default: us-east-1
+    required: true
+  - label: Amount of memory
+    type: text
+    name: memory
+    help: "Inform the amount of memory (e.g: 64Mi)."
+    required: true
+  - label: Amount of cpu
+    type: text
+    name: cpu
+    help: "Inform the amount of cpu (e.g: 100m)."
+    required: false
+    pattern: '\d+m'
+  - label: Minimum number of replicas
+    type: int
+    name: min_replicas
+    default: "2"
+    help: "Inform the minimum number of replicas (e.g: 1)."
+    required: false
+  - label: Maximum number of replicas
+    type: int
+    name: max_replicas
+    default: "4"
+    help: "Inform the maximum number of replicas (e.g: 2)."
+    required: false
+  - label: Memory limit for scaling pods
+    type: int
+    name: average_memory_utilization
+    default: "80"
+    help: "Inform the memory limit for scaling pods (e.g: 80, just the number). When a pod reaches this memory limit, another pod will be created, until it reaches the maximum pods."
+    required: false
+  - label: CPU limit for scaling pods
+    type: int
+    name: average_cpu_utilization
+    default: "80"
+    help: "Inform the CPU limit for scaling pods (e.g: 80, just the number). When a pod reaches this CPU limit, another pod will be created, until it reaches the maximum pods."
+    required: false

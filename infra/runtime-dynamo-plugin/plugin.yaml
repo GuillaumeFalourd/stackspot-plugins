@@ -1,0 +1,113 @@
+schema-version: v2
+kind: plugin
+metadata:
+  version: 2.0.1
+  picture: plugin.png
+  name: runtime-dynamo-plugin
+  display-name: Runtimes DynamoDB
+  description: This plugin is responsible for provisioning an DynamoDB on AWS
+spec:
+  about: docs/about.md
+  requirements: docs/requirements.md
+  implementation: docs/implementation.md
+  release-notes: docs/release-notes-0.0.1.md
+  type: infra
+  runtime:
+    environment:
+      - terraform-1-4
+  repository: https://github.com/GuillaumeFalourd/stackspot-plugins
+  technologies: 
+    - AWS DynamoDB
+  requires:
+    connections:
+      - type: aws-iam-role-conn
+        alias: iam-role-default
+  generates:
+    connections:
+      - type: aws-dynamo-conn
+        alias: dynamo-default
+        outputs:
+          - from: aws_dynamo_conn_table_arn
+            to: arn
+          - from: aws_dynamo_conn_table_name
+            to: table_name
+  inputs:
+    - label: Table Name
+      name: table_name
+      type: text
+      required: true
+    - label: Region
+      name: region
+      type: text
+      required: true
+      items:
+        - "us-east-1"
+        - "sa-east-1"
+    - label: Billing Mode
+      name: billing_mode
+      type: text
+      required: true
+      items:
+      - "PROVISIONED"
+      - "PAY_PER_REQUEST"
+    - label: Read Capacity
+      name: read_capacity
+      type: int
+      required: false
+      condition:
+        variable: billing_mode
+        operator: "=="
+        value: "PROVISIONED"
+    - label: Write Capacity
+      name: write_capacity
+      type: int
+      required: false
+      condition:
+        variable: billing_mode
+        operator: "=="
+        value: "PROVISIONED"
+    - label: Hash Key
+      name: hash_key
+      type: text
+      required: true
+    - label: Hash Key Type (S - String, N - Number, B - Binary)
+      name: hash_key_type
+      type: text
+      required: true
+      items:
+      - "S"
+      - "N"
+      - "B"
+    - label: Range Key
+      name: range_key
+      type: text
+      required: true
+    - label: Range Key Type (S - String, N - Number, B - Binary)
+      name: range_key_type
+      type: text
+      required: true
+      items:
+      - "S"
+      - "N"
+      - "B"
+    - label: Acces Type
+      name: access_type
+      type: text
+      required: true
+      items:
+      - write
+      - read
+    - label: Server side encryption
+      name: server_side_encryption
+      type: text
+      required: true
+      items:
+      - 'true'
+      - 'false'
+    - label: Point in time recovery
+      name: point_in_time_recovery
+      type: text
+      required: true
+      items:
+      - 'true'
+      - 'false'

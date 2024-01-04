@@ -1,0 +1,69 @@
+schema-version: v2
+kind: plugin
+metadata:
+  name: runtime-sqs-plugin
+  display-name: runtime-sqs-plugin
+  description: This plugin is responsible for provisioning an SQS on AWS
+  version: 0.0.1
+  picture: plugin.png
+spec:
+  type: infra
+  compatibility:
+    - aws
+  about: docs/about.md
+  implementation: docs/implementation.md
+  release-notes: docs/release-notes-0.0.1.md
+  requirements: docs/requirements.md
+  runtime:
+    environment:
+      - terraform-1-4
+  repository: https://github.com/GuillaumeFalourd/stackspot-plugins
+  technologies: 
+    - AWS SQS
+  requires:
+    connections:
+      - type: aws-iam-role-conn
+        alias: iam-role-default
+  generates:
+    connections:
+      - type: aws-sqs-conn
+        alias: sqs-default
+        outputs:
+          - from: aws_sqs_queue_arn
+            to: arn
+          - from: aws_sqs_queue_name
+            to: queue_name
+          - from: aws_sqs_queue_url
+            to: url
+  inputs:
+  - label: Queue Name
+    name: queue_name
+    type: text
+    required: true
+  - label: Max Retries
+    name: max_receive_count
+    type: int
+    required: true
+    help: Max retries count before sending messages to DLQ
+  - label: Visbility Timeout Seconds
+    name: visibility_timeout_seconds
+    type: int
+    required: true
+    help: Visibility Timeout for messages in seconds
+  - label: Queue Type
+    name: queue_type
+    type: text
+    required: true
+    items:
+    - FIFO
+    - Standard
+  inputs-envs:
+  - label: Region
+    name: region
+    type: text
+    required: true
+    items:
+    - sa-east-1
+    - us-east-1
+  computed-inputs:
+    queue_name: "{{ inputs.queue_name | replace('-', '_') }}"

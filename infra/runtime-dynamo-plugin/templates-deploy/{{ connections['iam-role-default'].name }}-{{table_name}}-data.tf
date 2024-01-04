@@ -1,0 +1,1 @@
+data "aws_caller_identity" "{{ connections['iam-role-default'].name }}_{{table_name}}" {}
