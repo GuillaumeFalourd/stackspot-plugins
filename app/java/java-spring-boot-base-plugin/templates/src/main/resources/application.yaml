@@ -1,6 +1,0 @@
-##Default profile
-spring:
-  application:
-    name: meuapp
-server:
-  port: 8080

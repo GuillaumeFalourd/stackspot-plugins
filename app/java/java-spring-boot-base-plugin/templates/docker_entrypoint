@@ -1,5 +1,0 @@
-#!/bin/bash
-echo "Entrypoint"
-
-echo "Executing application"
-java -Djava.security.egd=file:/dev/./urandom -jar ./app/springApp.jar

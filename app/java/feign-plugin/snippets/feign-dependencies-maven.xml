@@ -1,0 +1,5 @@
+<dependency>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-starter-openfeign</artifactId>
+  <version>{% if spring_boot_version == '3.0.1'%}4.0.1{% else %}3.1.6{% endif %}</version>
+</dependency>
