@@ -84,16 +84,16 @@ jobs:
           REPOSITORY_NAME: {{ '${{ github.event.repository.name }}' }}
           RUN_TASK_ID: {{ '${{ matrix.task.runTaskId }}' }}
 
-          cancel-run:
-            runs-on: ubuntu-latest
-            needs: [orchestration, provision]
-            if: {% raw %}${{ always() && contains(needs.*.result, 'failure') }}{% endraw %}
-            
-            steps:
-              - name: Cancel run
-                uses: stack-spot/runtime-cancel-run-action@v1
-                with:
-                  CLIENT_ID: {{ '${{ secrets.CLIENT_ID }}' }}
-                  CLIENT_KEY: {{ '${{ secrets.CLIENT_KEY }}' }}
-                  CLIENT_REALM: {{ '${{ secrets.CLIENT_REALM }}' }}
-                  RUN_ID: {{ '${{ needs.orchestration.outputs.run_id }}' }}
+  cancel-run:
+    runs-on: ubuntu-latest
+    needs: [orchestration, provision]
+    if: {% raw %}${{ always() && contains(needs.*.result, 'failure') }}{% endraw %}
+    
+    steps:
+      - name: Cancel run
+        uses: stack-spot/runtime-cancel-run-action@v1
+        with:
+          CLIENT_ID: {{ '${{ secrets.CLIENT_ID }}' }}
+          CLIENT_KEY: {{ '${{ secrets.CLIENT_KEY }}' }}
+          CLIENT_REALM: {{ '${{ secrets.CLIENT_REALM }}' }}
+          RUN_ID: {{ '${{ needs.orchestration.outputs.run_id }}' }}
