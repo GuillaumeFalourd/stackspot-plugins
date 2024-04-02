@@ -31,7 +31,7 @@ jobs:
           IAC_REGION: {{ aws_region }}
           VERBOSE: true
 
-  run-task:
+  run-tasks:
     runs-on: {{ self_hosted_runner_name }}
     needs: [get-tasks]
     strategy:
@@ -86,7 +86,7 @@ jobs:
 
   cancel-run:
     runs-on: ubuntu-latest
-    needs: [orchestration, provision]
+    needs: [get-tasks, run-tasks]
     if: {% raw %}${{ always() && contains(needs.*.result, 'failure') }}{% endraw %}
     
     steps:
