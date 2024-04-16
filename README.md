@@ -6,7 +6,7 @@ Repository with StackSpot plugins
 
 ## Plugins
 
-### Ready
+### How to use
 
 #### Plugin Schema V1
 
