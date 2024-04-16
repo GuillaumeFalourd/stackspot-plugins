@@ -20,7 +20,7 @@ jobs:
         folders: ${{ steps.array.outputs.array }}
     steps:
       - uses: actions/checkout@v4
-      - uses: dorny/paths-filter@v2
+      - uses: dorny/paths-filter@v3.0.2
         id: changes
         with:
           filters: |
