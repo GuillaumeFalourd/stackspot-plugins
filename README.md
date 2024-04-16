@@ -1,5 +1,7 @@
 # stackspot-plugins
 
+[![Publish Github Plugins](https://github.com/GuillaumeFalourd/stackspot-plugins/actions/workflows/publish-github-plugins.yaml/badge.svg)](https://github.com/GuillaumeFalourd/stackspot-plugins/actions/workflows/publish-github-plugins.yaml) [![Publish Infra Plugins](https://github.com/GuillaumeFalourd/stackspot-plugins/actions/workflows/publish-infra-plugins.yaml/badge.svg)](https://github.com/GuillaumeFalourd/stackspot-plugins/actions/workflows/publish-infra-plugins.yaml) [![Publish Java Plugins](https://github.com/GuillaumeFalourd/stackspot-plugins/actions/workflows/publish-java-plugins.yaml/badge.svg)](https://github.com/GuillaumeFalourd/stackspot-plugins/actions/workflows/publish-java-plugins.yaml)
+
 Repository with StackSpot plugins
 
 ## Plugins
