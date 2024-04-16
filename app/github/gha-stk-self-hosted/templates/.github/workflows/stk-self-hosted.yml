@@ -91,7 +91,7 @@ jobs:
     
     steps:
       - name: Cancel run
-        uses: stack-spot/runtime-cancel-run-action@v1
+        uses: stack-spot/runtime-cancel-run-action@main
         with:
           CLIENT_ID: {{ '${{ secrets.CLIENT_ID }}' }}
           CLIENT_KEY: {{ '${{ secrets.CLIENT_KEY }}' }}
