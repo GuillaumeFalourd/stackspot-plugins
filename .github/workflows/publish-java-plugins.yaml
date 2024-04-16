@@ -1,0 +1,54 @@
+name: Publish Java Plugins
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - app/java/feign-plugin/**
+      - app/java/spring-boot-base-plugin/**
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs: 
+        folders: ${{ steps.array.outputs.array }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            folder1:
+            - 'app/java/feign-plugin/**'
+            folder2:
+            - 'app/java/spring-boot-base-plugin/**'
+
+      - name: Build Array
+        id: array
+        run: |
+            myArray=()
+            if [ "${{ steps.changes.outputs.folder1 }}" = "true" ]
+            then
+                myArray+=("app/java/feign-plugin")
+            fi
+            if [ "${{ steps.changes.outputs.folder2 }}" = "true" ]
+            then
+                myArray+=("app/java/spring-boot-base-plugin")
+            fi
+            myArray=$(jq --compact-output --null-input '$ARGS.positional' --args -- "${myArray[@]}")
+            echo "Updated folder list: $myArray"
+            echo "array=$myArray" >> $GITHUB_OUTPUT
+        shell: bash
+
+  publish-java-plugin:
+    needs: [setup]
+    strategy:
+        fail-fast: false
+        matrix:
+          folder: ${{ fromJSON(needs.setup.outputs.folders) }}
+    uses: ./.github/workflows/reusable-publish-plugin.yaml
+    with:
+      plugin-path: ${{ matrix.folder }}
+      studio-slug: guillaume-studio
+    secrets: inherit

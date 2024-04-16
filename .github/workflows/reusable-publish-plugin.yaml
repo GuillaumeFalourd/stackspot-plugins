@@ -1,0 +1,39 @@
+name: Reusable publish plugin
+
+on:
+  workflow_call:
+    inputs:
+      plugin-path:
+        description: The path of the plugin.
+        required: true
+        type: string
+      studio-slug:
+        description: The slug of the studio to publish.
+        required: true
+        type: string
+
+concurrency:
+  group: ${{ inputs.plugin-path }}
+  cancel-in-progress: false
+
+jobs:
+  publish-plugin:
+    name: Publish plugin
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install STK CLI
+        uses: stack-spot/stk-cli-action@v1.1
+        with:
+          client_id: ${{ secrets.STK_CLIENT_ID }}
+          client_key: ${{ secrets.STK_CLIENT_KEY }}
+          realm: ${{ secrets.STK_REALM }}
+      - name: Show STK CLI version
+        run: stk --version
+      - name: Validate plugin
+        run: stk validate plugin --verbose
+        working-directory: ${{ inputs.plugin-path }}
+      - name: Publish plugin
+        run: stk publish plugin --studio '${{ inputs.studio-slug }}' --verbose
+        working-directory: ${{ inputs.plugin-path }}

@@ -1,0 +1,61 @@
+name: Publish Infra Plugins
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - infra/microservice-creator-runtime-plugin/**
+      - infra/runtime-dynamo-plugin/**
+      - infra/runtime-sqs-plugin/**
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs: 
+        folders: ${{ steps.array.outputs.array }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            folder1:
+            - 'infra/microservice-creator-runtime-plugin/**'
+            folder2:
+            - 'infra/runtime-dynamo-plugin/**'
+            folder3:
+            - 'infra/runtime-sqs-plugin/**'
+
+      - name: Build Array
+        id: array
+        run: |
+            myArray=()
+            if [ "${{ steps.changes.outputs.folder1 }}" = "true" ]
+            then
+                myArray+=("infra/microservice-creator-runtime-plugin")
+            fi
+            if [ "${{ steps.changes.outputs.folder2 }}" = "true" ]
+            then
+                myArray+=("infra/runtime-dynamo-plugin")
+            fi
+            if [ "${{ steps.changes.outputs.folder3 }}" = "true" ]
+            then
+                myArray+=("infra/runtime-sqs-plugin")
+            fi
+            myArray=$(jq --compact-output --null-input '$ARGS.positional' --args -- "${myArray[@]}")
+            echo "Updated folder list: $myArray"
+            echo "array=$myArray" >> $GITHUB_OUTPUT
+        shell: bash
+
+  publish-infra-plugin:
+    needs: [setup]
+    strategy:
+        fail-fast: false
+        matrix:
+          folder: ${{ fromJSON(needs.setup.outputs.folders) }}
+    uses: ./.github/workflows/reusable-publish-plugin.yaml
+    with:
+      plugin-path: ${{ matrix.folder }}
+      studio-slug: guillaume-studio
+    secrets: inherit

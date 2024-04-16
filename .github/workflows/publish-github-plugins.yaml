@@ -1,0 +1,89 @@
+name: Publish Github Plugins
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - app/github/gha-auto-assign/**
+      - app/github/gha-gitleaks/**
+      - app/github/gha-horusec/**
+      - app/github/gha-stk-self-hosted/**
+      - app/github/gha-super-linter/**
+      - app/github/init-repo/**
+      - app/github/issues-templates/**
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs: 
+        folders: ${{ steps.array.outputs.array }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            folder1:
+            - 'app/github/gha-auto-assign/**'
+            folder2:
+            - 'app/github/gha-gitleaks/**'
+            folder3:
+            - 'app/github/gha-horusec/**'
+            folder4:
+            - 'app/github/gha-stk-self-hosted/**'
+            folder5:
+            - 'app/github/gha-super-linter/**'
+            folder6:
+            - 'app/github/init-repo/**'
+            folder7:
+            - 'app/github/issues-templates/**'
+
+      - name: Build Array
+        id: array
+        run: |
+            myArray=()
+            if [ "${{ steps.changes.outputs.folder1 }}" = "true" ]
+            then
+                myArray+=("app/github/gha-auto-assign")
+            fi
+            if [ "${{ steps.changes.outputs.folder2 }}" = "true" ]
+            then
+                myArray+=("app/github/gha-gitleaks")
+            fi
+            if [ "${{ steps.changes.outputs.folder3 }}" = "true" ]
+            then
+                myArray+=("app/github/gha-horusec")
+            fi
+            if [ "${{ steps.changes.outputs.folder4 }}" = "true" ]
+            then
+                myArray+=("app/github/gha-stk-self-hosted")
+            fi
+            if [ "${{ steps.changes.outputs.folder5 }}" = "true" ]
+            then
+                myArray+=("app/github/gha-super-linter")
+            fi
+            if [ "${{ steps.changes.outputs.folder6 }}" = "true" ]
+            then
+                myArray+=("app/github/init-repo")
+            fi
+            if [ "${{ steps.changes.outputs.folder7 }}" = "true" ]
+            then
+                myArray+=("app/github/issues-templates")
+            fi
+            myArray=$(jq --compact-output --null-input '$ARGS.positional' --args -- "${myArray[@]}")
+            echo "Updated folder list: $myArray"
+            echo "array=$myArray" >> $GITHUB_OUTPUT
+        shell: bash
+
+  publish-github-plugin:
+    needs: [setup]
+    strategy:
+        fail-fast: false
+        matrix:
+          folder: ${{ fromJSON(needs.setup.outputs.folders) }}
+    uses: ./.github/workflows/reusable-publish-plugin.yaml
+    with:
+      plugin-path: ${{ matrix.folder }}
+      studio-slug: guillaume-studio
+    secrets: inherit
